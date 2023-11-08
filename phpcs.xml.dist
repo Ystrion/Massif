@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Ystrion's Standard" namespace="Ystrion\CS\Standard">
+  <description>Strict rules for light development.</description>
+
+  <file>./src</file>
+  <file>./tests</file>
+
+  <arg name="extensions" value="php"/>
+  <arg name="colors"/>
+
+  <rule ref="PSR12"/>
+</ruleset>

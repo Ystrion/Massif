@@ -1,0 +1,19 @@
+# Composer
+/vendor/
+/composer.lock
+
+# npm
+/node_modules/
+
+# PHP_CodeSniffer
+/phpcs.xml
+
+# PHPStan
+/phpstan.neon
+
+# PHPUnit
+/.phpunit.cache/
+/phpunit.xml
+
+# Other files
+/.env

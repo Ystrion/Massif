@@ -1,0 +1,56 @@
+#!/usr/bin/env php
+
+<?php
+
+use Application\Kernel;
+use Application\Utils\Settings;
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Tools\Console\Command\CurrentCommand;
+use Doctrine\Migrations\Tools\Console\Command\DiffCommand;
+use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
+use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
+use Doctrine\Migrations\Tools\Console\Command\GenerateCommand;
+use Doctrine\Migrations\Tools\Console\Command\LatestCommand;
+use Doctrine\Migrations\Tools\Console\Command\ListCommand;
+use Doctrine\Migrations\Tools\Console\Command\MigrateCommand;
+use Doctrine\Migrations\Tools\Console\Command\RollupCommand;
+use Doctrine\Migrations\Tools\Console\Command\StatusCommand;
+use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
+use Doctrine\Migrations\Tools\Console\Command\UpToDateCommand;
+use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$kernel = new Kernel();
+
+$kernel->initSettings();
+$container = $kernel->initContainer();
+
+/** @var EntityManagerInterface $entityManager */
+$entityManager = $container->get(EntityManagerInterface::class);
+
+$dependencyFactory = DependencyFactory::fromEntityManager(
+  new ConfigurationArray(Settings::getArray('migrations')),
+  new ExistingEntityManager($entityManager)
+);
+
+ConsoleRunner::run(new SingleManagerProvider($entityManager), [
+  new CurrentCommand($dependencyFactory),
+  new DiffCommand($dependencyFactory),
+  new DumpSchemaCommand($dependencyFactory),
+  new ExecuteCommand($dependencyFactory),
+  new GenerateCommand($dependencyFactory),
+  new LatestCommand($dependencyFactory),
+  new ListCommand($dependencyFactory),
+  new MigrateCommand($dependencyFactory),
+  new RollupCommand($dependencyFactory),
+  new StatusCommand($dependencyFactory),
+  new SyncMetadataCommand($dependencyFactory),
+  new UpToDateCommand($dependencyFactory),
+  new VersionCommand($dependencyFactory)
+]);
